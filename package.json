@@ -1,0 +1,30 @@
+{
+  "name": "samurai-practice",
+  "version": "0.1.0",
+  "description": "Samurai Wars Practice Scenario",
+  "homepage": "https://github.com/warstage/samurai-practice",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "start": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felix Ungman",
+  "license": "GPL-3.0+",
+  "files": [
+    "LICENSE",
+    "README.md"
+  ],
+  "dependencies": {
+    "warstage-runtime": "^0.1.21"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.10",
+    "ts-loader": "^8.0.6",
+    "tslint": "^6.1.0",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
