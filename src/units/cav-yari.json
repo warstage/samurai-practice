@@ -1,0 +1,58 @@
+{
+  "unitType": {
+    "subunits": [{
+      "element": {
+        "size": [1.1, 2.5, 2.3],
+        "shape": "CAV-YARI",
+        "movement": {
+          "speed": { "normal": 7.0, "fast": 14.0 }
+        }
+      },
+      "individuals": 40,
+      "weapons": [{
+        "melee": {
+          "reach": 5.0,
+          "time": { "ready": 1.0, "strike": 2.0 }
+        }
+      }]
+    }],
+    "formations": [{
+      "name": "Line",
+      "type": "LINE",
+      "spacing": [1.1, 1.7],
+      "ranks": 5
+    }],
+    "training": 0.8
+  },
+  "shape": {
+    "size": [1.0, 3.0, 3.0],
+    "skin": "cav",
+    "line": "yari"
+  },
+  "marker": {
+    "texture": "markers.png",
+    "texgrid": 16,
+    "layers": [
+      { "vertices": [[0, 0], [3, 3]], "state": { "hostile": true, "command": true, "dragged": false } },
+      { "vertices": [[3, 0], [6, 3]], "state": { "allied": true, "command": true, "dragged": false } },
+      { "vertices": [[6, 0], [9, 3]], "state": { "friendly": true, "command": true, "dragged": false } },
+      { "vertices": [[9, 0], [12, 3]], "state": { "routed": true, "command": true, "dragged": false } },
+
+      { "vertices": [[0, 3], [3, 6]], "state": { "hostile": true, "command": false, "dragged": false } },
+      { "vertices": [[3, 3], [6, 6]], "state": { "allied": true, "command": false, "dragged": false } },
+      { "vertices": [[6, 3], [9, 6]], "state": { "friendly": true, "command": false, "dragged": false } },
+      { "vertices": [[9, 3], [12, 6]], "state": { "routed": true, "command": false, "dragged": false } },
+
+      { "vertices": [[0, 6], [ 3, 9]], "state": { "hostile": true, "dragged": true } },
+      { "vertices": [[3, 6], [ 6, 9]], "state": { "allied": true, "dragged": true } },
+      { "vertices": [[6, 6], [ 9, 9]], "state": { "friendly": true, "dragged": true } },
+
+      { "vertices": [[0, 9], [3, 12]], "state": { "dragged": false } },
+      { "vertices": [[12, 0], [15, 3]], "state": { "dragged": false } },
+
+      { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
+      { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
+      { "vertices": [[9, 3], [12, 6]], "state": { "hovered": true, "dragged": false } }
+    ]
+  }
+}

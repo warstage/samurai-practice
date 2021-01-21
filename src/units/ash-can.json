@@ -1,0 +1,66 @@
+{
+  "unitType": {
+    "subunits": [{
+      "element": {
+        "size": [0.7, 1.8, 0.3],
+        "shape": "ASH-CAN",
+        "movement": {
+          "speed": { "normal": 1.0, "fast": 1.8 }
+        }
+      },
+      "individuals": 12,
+      "weapons": [{
+        "melee": {
+          "reach": 0.0,
+          "time": { "ready": 1.0, "strike": 3.0 }
+        }
+      }, {
+        "missiles": [{
+          "range": [50.0, 500.0],
+          "initialSpeed": 250.0,
+          "hitRadius": 4.0,
+          "time": { "aim": 5.0, "release": 1.5, "reload": 5.0 },
+          "projectileShape": "cannonball"
+        }]
+      }]
+    }],
+    "formations": [{
+      "name": "Line",
+      "type": "LINE",
+      "spacing": [1.1, 0.9],
+      "ranks": 5
+    }],
+    "training": 0.5
+  },
+  "shape": {
+    "size": [1.0, 2.0, 1.0],
+    "skin": "ash",
+    "line": null
+  },
+  "marker": {
+    "texture": "markers.png",
+    "texgrid": 16,
+    "layers": [
+      { "vertices": [[0, 0], [3, 3]], "state": { "hostile": true, "command": true, "dragged": false } },
+      { "vertices": [[3, 0], [6, 3]], "state": { "allied": true, "command": true, "dragged": false } },
+      { "vertices": [[6, 0], [9, 3]], "state": { "friendly": true, "command": true, "dragged": false } },
+      { "vertices": [[9, 0], [12, 3]], "state": { "routed": true, "command": true, "dragged": false } },
+
+      { "vertices": [[0, 3], [3, 6]], "state": { "hostile": true, "command": false, "dragged": false } },
+      { "vertices": [[3, 3], [6, 6]], "state": { "allied": true, "command": false, "dragged": false } },
+      { "vertices": [[6, 3], [9, 6]], "state": { "friendly": true, "command": false, "dragged": false } },
+      { "vertices": [[9, 3], [12, 6]], "state": { "routed": true, "command": false, "dragged": false } },
+
+      { "vertices": [[0, 6], [ 3, 9]], "state": { "hostile": true, "dragged": true } },
+      { "vertices": [[3, 6], [ 6, 9]], "state": { "allied": true, "dragged": true } },
+      { "vertices": [[6, 6], [ 9, 9]], "state": { "friendly": true, "dragged": true } },
+
+      { "vertices": [[6, 9], [9, 12]], "state": { "dragged": false } },
+      { "vertices": [[9, 6], [12, 9]], "state": { "dragged": false } },
+
+      { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
+      { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
+      { "vertices": [[9, 3], [12, 6]], "state": { "hovered": true, "dragged": false } }
+    ]
+  }
+}
