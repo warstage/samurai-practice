@@ -16,11 +16,13 @@
         }
       }, {
         "missiles": [{
+          "id": 2,
           "range": [20.0, 110.0],
           "initialSpeed": 750.0,
           "hitRadius": 0.35,
           "time": { "aim": 3.0, "release": 0.5, "reload": 3.0 },
-          "projectileShape": "bullet"
+          "trajectoryShape": "bullet",
+          "releaseShape": "smoke"
         }]
       }]
     }],
