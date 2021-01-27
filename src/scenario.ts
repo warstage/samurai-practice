@@ -1,4 +1,4 @@
-import {AssetLoader, Alliance, Commander, Match, Navigator, ObjectRef, TeamKills, Unit, Value, vec2, ShapeRef} from 'warstage-runtime';
+import {AssetLoader, Alliance, Commander, Match, Navigator, ObjectRef, TeamKills, Unit, Value, Vector, vec2, ShapeRef} from 'warstage-runtime';
 import {Subscription} from 'rxjs';
 import * as shapes from './shapes';
 import * as units from './units';
@@ -23,7 +23,7 @@ export class Scenario {
         let result: Unit = null;
         let distance: number;
         units.forEach(unit => {
-            const d = vec2.distanceSquared(position, unit.center);
+            const d = Vector.distance2(position, unit.center);
             if (result == null || d < distance) {
                 result = unit;
                 distance = d;
@@ -34,7 +34,7 @@ export class Scenario {
 
     static findClusterCenter(units: Unit[]): vec2 {
         if (units.length === 0) {
-            return {x: 512, y: 512};
+            return [512, 512];
         }
 
         const centerUnit = Scenario.findCenterUnit(units);
@@ -45,12 +45,12 @@ export class Scenario {
 
         units.forEach(unit => {
             const unitCenter = unit.center;
-            const w = 1.0 / (50 + vec2.distance(unitCenter, centerUnitCenter));
-            x += w * unitCenter.x;
-            y += w * unitCenter.y;
+            const w = 1.0 / (50 + Vector.distance(unitCenter, centerUnitCenter));
+            x += w * unitCenter[0];
+            y += w * unitCenter[1];
             weight += w;
         });
-        return {x: x / weight, y: y / weight};
+        return [x / weight, y / weight];
     }
 
     static findCenterUnit(units: Unit[]): Unit {
@@ -63,7 +63,7 @@ export class Scenario {
             let weight = 0;
             units.forEach(u => {
                 if (u !== unit) {
-                    weight += 1.0 / (1.0 + vec2.distance(u.center, unit.center));
+                    weight += 1.0 / (1.0 + Vector.distance(u.center, unit.center));
                 }
             });
             items.push({u: unit, w: weight});
@@ -98,7 +98,7 @@ export class Scenario {
     startup(match: ObjectRef) {
         this.match = match as Match;
 
-        this.navigator.battle.federation.provideService('LoadTexture', AssetLoader.getServiceProvider());
+        this.navigator.battle.federation.provideService('_LoadTexture', AssetLoader.getServiceProvider());
 
         this.tryStartMatch();
         this.subscription = this.navigator.lobby.federation.objects<Match>('Match').subscribe(object => {
@@ -216,20 +216,20 @@ export class Scenario {
     spawnPlayerUnits(commanders: Commander[]) {
         let index = 0;
         const count = commanders.length;
-        const center = {x: 512, y: 512};
+        const center: vec2 = [512, 512];
         const bearing = 0.5 * Math.PI;
 
-        this.makePlayerUnit(commanders[index++ % count], units.sam_bow, vec2.add(center, {x: -50, y: 0}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_arq, vec2.add(center, {x: 0, y: 0}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_bow, vec2.add(center, {x: 50, y: 0}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_yari, vec2.add(center, {x: -25, y: -30}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_yari, vec2.add(center, {x: 25, y: -30}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_kata, vec2.add(center, {x: -50, y: -60}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.gen_kata, vec2.add(center, {x: 0, y: -60}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_kata, vec2.add(center, {x: 50, y: -60}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.cav_yari, vec2.add(center, {x: -70, y: -100}), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_nagi, vec2.add(center, {x: 0, y: -90}), bearing);
-        this.makePlayerUnit(commanders[index % count],   units.cav_bow, vec2.add(center, {x: 70, y: -100}), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_bow, Vector.add(center, [-50, 0]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_arq, Vector.add(center, [0, 0]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_bow, Vector.add(center, [50, 0]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_yari, Vector.add(center, [-25, -30]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_yari, Vector.add(center, [25, -30]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_kata, Vector.add(center, [-50, -60]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.gen_kata, Vector.add(center, [0, -60]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_kata, Vector.add(center, [50, -60]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.cav_yari, Vector.add(center, [-70, -100]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], units.sam_nagi, Vector.add(center, [0, -90]), bearing);
+        this.makePlayerUnit(commanders[index % count],   units.cav_bow, Vector.add(center, [70, -100]), bearing);
     }
 
     makePlayerUnit(commander: Commander, unit: any, position: vec2, bearing: number) {
@@ -238,7 +238,7 @@ export class Scenario {
             commander,
             unitType: unit.unitType,
             marker: unit.marker,
-            'stats.placement': {x: position.x, y: position.y, z: bearing}
+            'stats.placement': {x: position[0], y: position[1], z: bearing}
         });
     }
 
@@ -273,24 +273,24 @@ export class Scenario {
                 const targetCenter = targetUnit.center;
                 const range = unit['stats.maximumRange'] as number;
                 if (range > 0) {
-                    const diff = vec2.sub(targetCenter, unitCenter);
-                    const dist = vec2.norm(diff);
+                    const diff = Vector.sub(targetCenter, unitCenter);
+                    const dist = Vector.length(diff);
                     if (dist > 0.9 * range) {
-                        const destination = vec2.sub(targetCenter, vec2.mul(diff, 0.9 * range / dist));
+                        const destination = Vector.sub(targetCenter, Vector.mul(diff, 0.9 * range / dist));
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
                             path: [unitCenter, destination],
-                            facing: vec2.angle(vec2.sub(destination, unitCenter)),
+                            facing: Vector.angle(Vector.sub(destination, unitCenter)),
                             running: false
                         }).then(() => {}, reason => {
                             console.error(reason);
                         });
                     } else if (dist < 0.5 * range) {
-                        const destination = vec2.sub(targetCenter, vec2.mul(diff, 0.7 * range / dist));
+                        const destination = Vector.sub(targetCenter, Vector.mul(diff, 0.7 * range / dist));
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
                             path: [unitCenter, destination],
-                            facing: vec2.angle(vec2.sub(destination, unitCenter)),
+                            facing: Vector.angle(Vector.sub(destination, unitCenter)),
                             running: true
                         }).then(() => {}, reason => {
                             console.error(reason);
@@ -299,33 +299,33 @@ export class Scenario {
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
                             path: [],
-                            facing: vec2.angle(vec2.sub(targetCenter, unitCenter)),
+                            facing: Vector.angle(Vector.sub(targetCenter, unitCenter)),
                             running: false
                         }).then(() => {}, reason => {
                             console.error(reason);
                         });
                     }
                 } else {
-                    if (vec2.distance(targetCenter, unitCenter) < 80) {
+                    if (Vector.distance(targetCenter, unitCenter) < 80) {
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
                             path: [unitCenter, targetCenter],
-                            facing: vec2.angle(vec2.sub(targetCenter, unitCenter)),
+                            facing: Vector.angle(Vector.sub(targetCenter, unitCenter)),
                             running: false
                         }).then(() => {}, reason => {
                             console.error(reason);
                         });
                     } else {
-                        let diff = vec2.sub(unitCenter, scriptCenter);
-                        const dist = vec2.norm(diff);
+                        let diff = Vector.sub(unitCenter, scriptCenter);
+                        const dist = Vector.length(diff);
                         if (dist > 100) {
-                            diff = vec2.mul(diff, 100 / dist);
+                            diff = Vector.mul(diff, 100 / dist);
                         }
-                        const destination = vec2.add(playerCenter, diff);
+                        const destination = Vector.add(playerCenter, diff);
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
                             path: [unitCenter, destination],
-                            facing: vec2.angle(vec2.sub(destination, unitCenter)),
+                            facing: Vector.angle(Vector.sub(destination, unitCenter)),
                             running: false
                         }).then(() => {}, reason => {
                             console.error(reason);
@@ -338,12 +338,9 @@ export class Scenario {
 
     spawnEnemyUnits(playerUnits: Unit[]) {
         const playerCenter = Scenario.findClusterCenter(playerUnits);
-        let direction = vec2.sub({x: 512, y: 512}, playerCenter);
-        const length = vec2.norm(direction);
-        direction = length > 1.0 ? vec2.mul(direction, 1.0 / length) : {x: 0, y: 1};
-
-        const center = vec2.add(playerCenter, vec2.mul(direction, 200));
-        const angle = vec2.angle(direction) + 0.5 * Math.PI;
+        const direction = Vector.normalize(Vector.sub([512, 512], playerCenter));
+        const center = Vector.add(playerCenter, Vector.mul(direction, 200));
+        const angle = Vector.angle(direction) + 0.5 * Math.PI;
 
         this.makeEnemyUnits(center, angle);
 
@@ -356,34 +353,34 @@ export class Scenario {
         const bearing = 0.5 * Math.PI - angle;
         switch (this.waveNumber) {
             case 0:
-                this.makeEnemyUnit(units.ash_yari, vec2.add(center, vec2.rotate({x: -90, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.ash_yari, vec2.add(center, vec2.rotate({x: -30, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.ash_yari, vec2.add(center, vec2.rotate({x: 30, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.ash_yari, vec2.add(center, vec2.rotate({x: 90, y: 0}, angle)), bearing);
+                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([-90, 0], angle)), bearing);
+                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([-30, 0], angle)), bearing);
+                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([30, 0], angle)), bearing);
+                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([90, 0], angle)), bearing);
                 break;
             case 1:
-                this.makeEnemyUnit(units.ash_bow, vec2.add(center, vec2.rotate({x: -40, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.ash_bow, vec2.add(center, vec2.rotate({x: 40, y: 0}, angle)), bearing);
+                this.makeEnemyUnit(units.ash_bow, Vector.add(center, Vector.rotate([-40, 0], angle)), bearing);
+                this.makeEnemyUnit(units.ash_bow, Vector.add(center, Vector.rotate([40, 0], angle)), bearing);
                 break;
             case 2:
-                this.makeEnemyUnit(units.sam_kata, vec2.add(center, vec2.rotate({x: -60, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.sam_nagi, vec2.add(center, vec2.rotate({x: 0, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.sam_kata, vec2.add(center, vec2.rotate({x: 60, y: 0}, angle)), bearing);
+                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
+                this.makeEnemyUnit(units.sam_nagi, Vector.add(center, Vector.rotate([0, 0], angle)), bearing);
+                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
                 break;
             case 3:
-                this.makeEnemyUnit(units.cav_bow, vec2.add(center, vec2.rotate({x: -60, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.cav_bow, vec2.add(center, vec2.rotate({x: 60, y: 0}, angle)), bearing);
+                this.makeEnemyUnit(units.cav_bow, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
+                this.makeEnemyUnit(units.cav_bow, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
                 break;
             case 4:
-                this.makeEnemyUnit(units.cav_yari, vec2.add(center, vec2.rotate({x: -90, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.sam_kata, vec2.add(center, vec2.rotate({x: -30, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.sam_kata, vec2.add(center, vec2.rotate({x: 30, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.cav_yari, vec2.add(center, vec2.rotate({x: 90, y: 0}, angle)), bearing);
+                this.makeEnemyUnit(units.cav_yari, Vector.add(center, Vector.rotate([-90, 0], angle)), bearing);
+                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([-30, 0], angle)), bearing);
+                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([30, 0], angle)), bearing);
+                this.makeEnemyUnit(units.cav_yari, Vector.add(center, Vector.rotate([90, 0], angle)), bearing);
                 break;
             case 5:
-                this.makeEnemyUnit(units.ash_arq, vec2.add(center, vec2.rotate({x: -60, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.ash_arq, vec2.add(center, vec2.rotate({x: 0, y: 0}, angle)), bearing);
-                this.makeEnemyUnit(units.ash_arq, vec2.add(center, vec2.rotate({x: 60, y: 0}, angle)), bearing);
+                this.makeEnemyUnit(units.ash_arq, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
+                this.makeEnemyUnit(units.ash_arq, Vector.add(center, Vector.rotate([0, 0], angle)), bearing);
+                this.makeEnemyUnit(units.ash_arq, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
                 break;
         }
     }
@@ -394,7 +391,7 @@ export class Scenario {
             alliance: this.enemyAlliance,
             unitType: unit.unitType,
             marker: unit.marker,
-            'stats.placement': {x: position.x, y: position.y, z: bearing},
+            'stats.placement': {x: position[0], y: position[1], z: bearing},
             'stats.canNotRally': true
         });
     }
