@@ -17,5 +17,8 @@ if (!RuntimeConfiguration.tryAutoRedirect()) {
     });
     navigator.lobby.onLeaveMatch.subscribe(() => {
         scenario.shutdown();
+        navigator.navigateToModule('https://warstage.net/#@1').then(() => {}, err => {
+            console.error(err);
+        })
     });
 }
