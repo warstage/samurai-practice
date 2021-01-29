@@ -1,3 +1,3 @@
-import * as particles from './particles.json';
-import * as vegetation from './vegetation.json';
+import particles from './particles.json';
+import vegetation from './vegetation.json';
 export { particles, vegetation }
