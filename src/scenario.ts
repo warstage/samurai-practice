@@ -113,11 +113,11 @@ export class Scenario {
             }
         }));
 
-        for (const shape of shapes.vegetation) {
+        for (const shape of shapes.vegetation.shapes) {
             this.navigator.battle.federation.objects<ShapeRef>('Shape').create(shape);
         }
 
-        for (const shape of shapes.particles) {
+        for (const shape of shapes.particles.shapes) {
             this.navigator.battle.federation.objects<ShapeRef>('Shape').create(shape);
         }
 

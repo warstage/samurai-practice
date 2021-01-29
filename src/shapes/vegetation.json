@@ -1,89 +1,91 @@
-[{
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [0, 0, 1, 1]
+{
+  "shapes": [{
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [0, 0, 1, 1]
+      }]
+    }]
+  }, {
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [1, 0, 2, 1]
+      }]
+    }]
+  }, {
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [2, 0, 3, 1]
+      }]
+    }]
+  }, {
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [3, 0, 4, 1]
+      }]
+    }]
+  }, {
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [4, 0, 5, 1]
+      }]
+    }]
+  }, {
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [5, 0, 6, 1]
+      }]
+    }]
+  }, {
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [6, 0, 7, 1]
+      }]
+    }]
+  }, {
+    "name": "tree",
+    "size": [1.0, 5.0, 1.0],
+    "skins": [{
+      "type": "BILLBOARD",
+      "loops": [{
+        "texture": "billboards.png",
+        "texgrid": 8,
+        "vertices": [7, 0, 8, 1]
+      }]
     }]
   }]
-}, {
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [1, 0, 2, 1]
-    }]
-  }]
-}, {
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [2, 0, 3, 1]
-    }]
-  }]
-}, {
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [3, 0, 4, 1]
-    }]
-  }]
-}, {
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [4, 0, 5, 1]
-    }]
-  }]
-}, {
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [5, 0, 6, 1]
-    }]
-  }]
-}, {
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [6, 0, 7, 1]
-    }]
-  }]
-}, {
-  "name": "tree",
-  "size": [1.0, 5.0, 1.0],
-  "skins": [{
-    "type": "BILLBOARD",
-    "loops": [{
-      "texture": "billboards.png",
-      "texgrid": 8,
-      "vertices": [7, 0, 8, 1]
-    }]
-  }]
-}]
+}
