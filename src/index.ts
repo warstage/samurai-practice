@@ -17,7 +17,9 @@ if (!RuntimeConfiguration.tryAutoRedirect()) {
     });
     navigator.lobby.onLeaveMatch.subscribe(() => {
         scenario.shutdown();
-        navigator.navigateToModule('https://warstage.net/#@1').then(() => {}, err => {
+        navigator.system.federation.requestService('EnterLobby', {
+            lobbyId: '000000000000000000000001' // samuraiwars.net online lobby-id
+        }).then(() => {}, err => {
             console.error(err);
         })
     });
