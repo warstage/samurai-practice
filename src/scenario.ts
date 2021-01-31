@@ -294,7 +294,7 @@ export class Scenario {
         const scriptCenter = Scenario.findClusterCenter(scriptUnits);
 
         scriptUnits.forEach(unit => {
-            const unitCenter = unit.center;
+            const unitCenter = (unit as any)._position || unit.center;
 
             const targetUnit = Scenario.findNearestUnit(playerUnits, unitCenter);
             if (targetUnit) {
@@ -307,7 +307,7 @@ export class Scenario {
                         const destination = Vector.sub(targetCenter, Vector.mul(diff, 0.9 * range / dist));
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
-                            path: [/*unitCenter,*/ destination],
+                            path: [unitCenter, destination],
                             facing: Vector.angle(Vector.sub(destination, unitCenter)),
                             running: false
                         }).then(() => {}, reason => {
@@ -317,7 +317,7 @@ export class Scenario {
                         const destination = Vector.sub(targetCenter, Vector.mul(diff, 0.7 * range / dist));
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
-                            path: [/*unitCenter,*/ destination],
+                            path: [unitCenter, destination],
                             facing: Vector.angle(Vector.sub(destination, unitCenter)),
                             running: true
                         }).then(() => {}, reason => {
@@ -337,7 +337,7 @@ export class Scenario {
                     if (Vector.distance(targetCenter, unitCenter) < 80) {
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
-                            path: [/*unitCenter,*/ targetCenter],
+                            path: [unitCenter, targetCenter],
                             facing: Vector.angle(Vector.sub(targetCenter, unitCenter)),
                             running: false
                         }).then(() => {}, reason => {
@@ -352,7 +352,7 @@ export class Scenario {
                         const destination = Vector.add(playerCenter, diff);
                         this.navigator.battle.federation.requestService('UpdateCommand', {
                             unit,
-                            path: [/*unitCenter,*/ destination],
+                            path: [unitCenter, destination],
                             facing: Vector.angle(Vector.sub(destination, unitCenter)),
                             running: false
                         }).then(() => {}, reason => {
