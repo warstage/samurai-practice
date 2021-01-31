@@ -1,0 +1,21 @@
+{
+  "particles": "<shapes/particles.json>",
+  "vegetation": "<shapes/vegetation.json>",
+  "units": {
+    "ash_arq": "<units/ash-arq.json>",
+    "ash_bow": "<units/ash-bow.json>",
+    "ash_kata": "<units/ash-kata.json>",
+    "ash_nagi": "<units/ash-nagi.json>",
+    "ash_yari": "<units/ash-yari.json>",
+    "cav_bow": "<units/cav-bow.json>",
+    "cav_kata": "<units/cav-kata.json>",
+    "cav_nagi": "<units/cav-nagi.json>",
+    "cav_yari": "<units/cav-yari.json>",
+    "gen_kata": "<units/gen-kata.json>",
+    "sam_arq": "<units/sam-arq.json>",
+    "sam_bow": "<units/sam-bow.json>",
+    "sam_kata": "<units/sam-kata.json>",
+    "sam_nagi": "<units/sam-nagi.json>",
+    "sam_yari": "<units/sam-yari.json>"
+  }
+}

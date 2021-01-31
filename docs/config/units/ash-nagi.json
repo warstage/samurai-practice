@@ -3,7 +3,7 @@
     "subunits": [{
       "element": {
         "size": [0.7, 1.8, 0.3],
-        "shape": "ASH-YARI",
+        "shape": "ASH-NAGI",
         "movement": {
           "speed": { "normal": 5.0, "fast": 9.0 }
         }
@@ -11,8 +11,8 @@
       "individuals": 80,
       "weapons": [{
         "melee": {
-          "reach": 5.0,
-          "time": { "ready": 1.0, "strike": 2.0 }
+          "reach": 2.4,
+          "time": { "ready": 1.0, "strike": 1.9 }
         }
       }]
     }],
@@ -25,9 +25,10 @@
     "training": 0.5
   },
   "shape": {
+    "name": "ASH-NAGI",
     "size": [1.0, 2.0, 1.0],
-    "skin": "ash",
-    "line": "yari"
+    "skins": ["<skins/ash.json>"],
+    "lines": ["<lines/nagi.json>"]
   },
   "marker": {
     "texture": "markers.png",
@@ -48,7 +49,7 @@
       { "vertices": [[6, 6], [ 9, 9]], "state": { "friendly": true, "dragged": true } },
 
       { "vertices": [[6, 9], [9, 12]], "state": { "dragged": false } },
-      { "vertices": [[12, 0], [15, 3]], "state": { "dragged": false } },
+      { "vertices": [[12, 6], [15, 9]], "state": { "dragged": false } },
 
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },

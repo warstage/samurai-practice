@@ -3,7 +3,7 @@
     "subunits": [{
       "element": {
         "size": [1.1, 2.5, 2.3],
-        "shape": "CAV-YARI",
+        "shape": "CAV-NAGI",
         "movement": {
           "speed": { "normal": 7.0, "fast": 14.0 }
         }
@@ -11,8 +11,8 @@
       "individuals": 40,
       "weapons": [{
         "melee": {
-          "reach": 5.0,
-          "time": { "ready": 1.0, "strike": 2.0 }
+          "reach": 2.4,
+          "time": { "ready": 1.0, "strike": 1.9 }
         }
       }]
     }],
@@ -25,9 +25,10 @@
     "training": 0.8
   },
   "shape": {
+    "name": "CAV-NAGI",
     "size": [1.0, 3.0, 3.0],
-    "skin": "cav",
-    "line": "yari"
+    "skins": ["<skins/cav.json>"],
+    "lines": ["<lines/nagi.json>"]
   },
   "marker": {
     "texture": "markers.png",
@@ -48,7 +49,7 @@
       { "vertices": [[6, 6], [ 9, 9]], "state": { "friendly": true, "dragged": true } },
 
       { "vertices": [[0, 9], [3, 12]], "state": { "dragged": false } },
-      { "vertices": [[12, 0], [15, 3]], "state": { "dragged": false } },
+      { "vertices": [[12, 6], [15, 9]], "state": { "dragged": false } },
 
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },

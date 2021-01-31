@@ -2,32 +2,42 @@
   "unitType": {
     "subunits": [{
       "element": {
-        "size": [1.1, 2.5, 2.3],
-        "shape": "CAV-NAGI",
+        "size": [0.7, 1.8, 0.3],
+        "shape": "ASH-BOW",
         "movement": {
-          "speed": { "normal": 7.0, "fast": 14.0 }
+          "speed": { "normal": 4.0, "fast": 10.0 }
         }
       },
-      "individuals": 40,
+      "individuals": 80,
       "weapons": [{
         "melee": {
-          "reach": 2.4,
-          "time": { "ready": 1.0, "strike": 1.9 }
+          "reach": 0.0,
+          "time": { "ready": 1.0, "strike": 3.0 }
         }
+      }, {
+        "missiles": [{
+          "id": 1,
+          "range": [20.0, 150.0],
+          "initialSpeed": 75.0,
+          "hitRadius": 0.45,
+          "time": { "aim": 2.0, "release": 0.2, "reload": 2.0 },
+          "trajectoryShape": "arrow"
+        }]
       }]
     }],
     "formations": [{
       "name": "Line",
       "type": "LINE",
-      "spacing": [1.1, 1.7],
+      "spacing": [1.1, 0.9],
       "ranks": 5
     }],
-    "training": 0.8
+    "training": 0.5
   },
   "shape": {
-    "size": [1.0, 3.0, 3.0],
-    "skin": "cav",
-    "line": "nagi"
+    "name": "ASH-BOW",
+    "size": [1.0, 2.0, 1.0],
+    "skins": ["<skins/ash.json>"],
+    "lines": null
   },
   "marker": {
     "texture": "markers.png",
@@ -47,8 +57,8 @@
       { "vertices": [[3, 6], [ 6, 9]], "state": { "allied": true, "dragged": true } },
       { "vertices": [[6, 6], [ 9, 9]], "state": { "friendly": true, "dragged": true } },
 
-      { "vertices": [[0, 9], [3, 12]], "state": { "dragged": false } },
-      { "vertices": [[12, 6], [15, 9]], "state": { "dragged": false } },
+      { "vertices": [[6, 9], [9, 12]], "state": { "dragged": false } },
+      { "vertices": [[12, 9], [15, 12]], "state": { "dragged": false } },
 
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },

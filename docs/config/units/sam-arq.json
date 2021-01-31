@@ -3,7 +3,7 @@
     "subunits": [{
       "element": {
         "size": [0.7, 1.8, 0.3],
-        "shape": "SAM-KATA",
+        "shape": "SAM-ARQ",
         "movement": {
           "speed": { "normal": 5.0, "fast": 9.0 }
         }
@@ -11,9 +11,19 @@
       "individuals": 80,
       "weapons": [{
         "melee": {
-          "reach": 1.0,
-          "time": { "ready": 1.0, "strike": 1.8 }
+          "reach": 0.0,
+          "time": { "ready": 1.0, "strike": 3.0 }
         }
+      }, {
+        "missiles": [{
+          "id": 2,
+          "range": [20.0, 110.0],
+          "initialSpeed": 750.0,
+          "hitRadius": 0.35,
+          "time": { "aim": 3.0, "release": 0.5, "reload": 3.0 },
+          "trajectoryShape": "bullet",
+          "releaseShape": "smoke"
+        }]
       }]
     }],
     "formations": [{
@@ -25,9 +35,10 @@
     "training": 0.8
   },
   "shape": {
+    "name": "SAM-ARQ",
     "size": [1.0, 2.0, 1.0],
-    "skin": "sam",
-    "line": "kata"
+    "skins": ["<skins/sam.json>"],
+    "lines": null
   },
   "marker": {
     "texture": "markers.png",
@@ -48,7 +59,7 @@
       { "vertices": [[6, 6], [ 9, 9]], "state": { "friendly": true, "dragged": true } },
 
       { "vertices": [[9, 9], [12, 12]], "state": { "dragged": false } },
-      { "vertices": [[12, 3], [15, 6]], "state": { "dragged": false } },
+      { "vertices": [[12, 12], [15, 15]], "state": { "dragged": false } },
 
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },
       { "vertices": [[9, 3], [12, 6]], "state": { "selected": true, "dragged": false } },

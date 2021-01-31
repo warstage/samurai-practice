@@ -1,9 +1,33 @@
-import {AssetLoader, Alliance, Commander, Match, Navigator, ObjectRef, TeamKills, Unit, Value, Vector, vec2, ShapeRef} from 'warstage-runtime';
+import {
+    AssetLoader,
+    Alliance,
+    Commander,
+    ConfigLoader,
+    Match,
+    Navigator,
+    ObjectRef,
+    TeamKills,
+    Unit,
+    Value,
+    Vector,
+    vec2,
+    ShapeRef, Shape, UnitType, Marker, ValueStruct
+} from 'warstage-runtime';
 import {Subscription} from 'rxjs';
-import * as shapes from './shapes';
-import * as units from './units';
-import * as skins from './skins';
-import * as lines from './lines';
+
+export interface ShapeValue extends Shape, ValueStruct {}
+
+interface ConfigUnit {
+    unitType: UnitType;
+    shape: ShapeValue;
+    marker: Marker;
+}
+
+interface Config {
+    particles: { shapes: ShapeValue[] };
+    vegetation: { shapes: ShapeValue[] };
+    units: { [name: string]: ConfigUnit };
+}
 
 export class Scenario {
     private subscription: Subscription;
@@ -18,6 +42,8 @@ export class Scenario {
     private playerAlliance: Alliance;
     private playerCommanders: Commander[];
     private waveNumber = 0;
+
+    private config: Config = null;
 
     static findNearestUnit(units: Unit[], position: vec2): any {
         let result: Unit = null;
@@ -113,21 +139,23 @@ export class Scenario {
             }
         }));
 
-        for (const shape of shapes.vegetation.shapes) {
+        this.loadConfig().then(() => {}, err => { console.log(err); })
+    }
+
+    async loadConfig() {
+        const configLoader = new ConfigLoader(AssetLoader.getJsonLoader());
+        this.config = await configLoader.load('config.json') as Config;
+
+        for (const shape of this.config.vegetation.shapes) {
             this.navigator.battle.federation.objects<ShapeRef>('Shape').create(shape);
         }
 
-        for (const shape of shapes.particles.shapes) {
+        for (const shape of this.config.particles.shapes) {
             this.navigator.battle.federation.objects<ShapeRef>('Shape').create(shape);
         }
 
-        for (const unit of Object.values(units)) {
-            this.navigator.battle.federation.objects<ShapeRef>('Shape').create({
-                name: unit.unitType.subunits[0].element.shape,
-                size: unit.shape.size,
-                skins: unit.shape.skin ? [skins[unit.shape.skin]] : null,
-                lines: unit.shape.line ? [lines[unit.shape.line]] : null,
-            });
+        for (const unit of Object.values<ConfigUnit>(this.config.units)) {
+            this.navigator.battle.federation.objects<ShapeRef>('Shape').create(unit.shape);
         }
     }
 
@@ -219,20 +247,20 @@ export class Scenario {
         const center: vec2 = [512, 512];
         const bearing = 0.5 * Math.PI;
 
-        this.makePlayerUnit(commanders[index++ % count], units.sam_bow, Vector.add(center, [-50, 0]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_arq, Vector.add(center, [0, 0]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_bow, Vector.add(center, [50, 0]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_yari, Vector.add(center, [-25, -30]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_yari, Vector.add(center, [25, -30]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_kata, Vector.add(center, [-50, -60]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.gen_kata, Vector.add(center, [0, -60]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_kata, Vector.add(center, [50, -60]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.cav_yari, Vector.add(center, [-70, -100]), bearing);
-        this.makePlayerUnit(commanders[index++ % count], units.sam_nagi, Vector.add(center, [0, -90]), bearing);
-        this.makePlayerUnit(commanders[index % count],   units.cav_bow, Vector.add(center, [70, -100]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_bow, Vector.add(center, [-50, 0]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_arq, Vector.add(center, [0, 0]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_bow, Vector.add(center, [50, 0]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_yari, Vector.add(center, [-25, -30]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_yari, Vector.add(center, [25, -30]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_kata, Vector.add(center, [-50, -60]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.gen_kata, Vector.add(center, [0, -60]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_kata, Vector.add(center, [50, -60]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.cav_yari, Vector.add(center, [-70, -100]), bearing);
+        this.makePlayerUnit(commanders[index++ % count], this.config.units.sam_nagi, Vector.add(center, [0, -90]), bearing);
+        this.makePlayerUnit(commanders[index % count],   this.config.units.cav_bow, Vector.add(center, [70, -100]), bearing);
     }
 
-    makePlayerUnit(commander: Commander, unit: any, position: vec2, bearing: number) {
+    makePlayerUnit(commander: Commander, unit: ConfigUnit, position: vec2, bearing: number) {
         this.navigator.battle.federation.objects<Unit>('Unit').create({
             alliance: this.playerAlliance,
             commander,
@@ -353,34 +381,34 @@ export class Scenario {
         const bearing = 0.5 * Math.PI - angle;
         switch (this.waveNumber) {
             case 0:
-                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([-90, 0], angle)), bearing);
-                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([-30, 0], angle)), bearing);
-                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([30, 0], angle)), bearing);
-                this.makeEnemyUnit(units.ash_yari, Vector.add(center, Vector.rotate([90, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_yari, Vector.add(center, Vector.rotate([-90, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_yari, Vector.add(center, Vector.rotate([-30, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_yari, Vector.add(center, Vector.rotate([30, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_yari, Vector.add(center, Vector.rotate([90, 0], angle)), bearing);
                 break;
             case 1:
-                this.makeEnemyUnit(units.ash_bow, Vector.add(center, Vector.rotate([-40, 0], angle)), bearing);
-                this.makeEnemyUnit(units.ash_bow, Vector.add(center, Vector.rotate([40, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_bow, Vector.add(center, Vector.rotate([-40, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_bow, Vector.add(center, Vector.rotate([40, 0], angle)), bearing);
                 break;
             case 2:
-                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
-                this.makeEnemyUnit(units.sam_nagi, Vector.add(center, Vector.rotate([0, 0], angle)), bearing);
-                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.sam_kata, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.sam_nagi, Vector.add(center, Vector.rotate([0, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.sam_kata, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
                 break;
             case 3:
-                this.makeEnemyUnit(units.cav_bow, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
-                this.makeEnemyUnit(units.cav_bow, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.cav_bow, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.cav_bow, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
                 break;
             case 4:
-                this.makeEnemyUnit(units.cav_yari, Vector.add(center, Vector.rotate([-90, 0], angle)), bearing);
-                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([-30, 0], angle)), bearing);
-                this.makeEnemyUnit(units.sam_kata, Vector.add(center, Vector.rotate([30, 0], angle)), bearing);
-                this.makeEnemyUnit(units.cav_yari, Vector.add(center, Vector.rotate([90, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.cav_yari, Vector.add(center, Vector.rotate([-90, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.sam_kata, Vector.add(center, Vector.rotate([-30, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.sam_kata, Vector.add(center, Vector.rotate([30, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.cav_yari, Vector.add(center, Vector.rotate([90, 0], angle)), bearing);
                 break;
             case 5:
-                this.makeEnemyUnit(units.ash_arq, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
-                this.makeEnemyUnit(units.ash_arq, Vector.add(center, Vector.rotate([0, 0], angle)), bearing);
-                this.makeEnemyUnit(units.ash_arq, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_arq, Vector.add(center, Vector.rotate([-60, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_arq, Vector.add(center, Vector.rotate([0, 0], angle)), bearing);
+                this.makeEnemyUnit(this.config.units.ash_arq, Vector.add(center, Vector.rotate([60, 0], angle)), bearing);
                 break;
         }
     }
