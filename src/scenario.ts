@@ -1,31 +1,18 @@
-import {
-    AssetLoader,
-    Alliance,
-    Commander,
-    ConfigLoader,
-    Match,
-    Navigator,
-    ObjectRef,
-    TeamKills,
-    Unit,
-    Value,
-    Vector,
-    vec2,
-    ShapeRef, Shape, UnitType, Marker, ValueStruct
-} from 'warstage-runtime';
+import { AssetLoader, ConfigLoader, Navigator, } from 'warstage-runtime';
 import {Subscription} from 'rxjs';
-
-export interface ShapeValue extends Shape, ValueStruct {}
+import {Alliance, Commander, Marker, Shape, TeamKills, Unit, UnitType} from 'warstage-battle-model';
+import {Match} from 'warstage-lobby-model';
+import {Entity, Value, vec2, Vector} from 'warstage-entities';
 
 interface ConfigUnit {
     unitType: UnitType;
-    shape: ShapeValue;
+    shape: Shape;
     marker: Marker;
 }
 
 interface Config {
-    particles: { shapes: ShapeValue[] };
-    vegetation: { shapes: ShapeValue[] };
+    particles: { shapes: Shape[] };
+    vegetation: { shapes: Shape[] };
     units: { [name: string]: ConfigUnit };
 }
 
@@ -121,7 +108,7 @@ export class Scenario {
         };
     }
 
-    startup(match: ObjectRef) {
+    startup(match: Entity<Match>) {
         this.match = match as Match;
 
         this.navigator.battle.federation.provideService('_LoadTexture', AssetLoader.getServiceProvider());
@@ -147,15 +134,15 @@ export class Scenario {
         this.config = await configLoader.load('config.json') as Config;
 
         for (const shape of this.config.vegetation.shapes) {
-            this.navigator.battle.federation.objects<ShapeRef>('Shape').create(shape);
+            this.navigator.battle.federation.objects<Shape>('Shape').create(shape);
         }
 
         for (const shape of this.config.particles.shapes) {
-            this.navigator.battle.federation.objects<ShapeRef>('Shape').create(shape);
+            this.navigator.battle.federation.objects<Shape>('Shape').create(shape);
         }
 
         for (const unit of Object.values<ConfigUnit>(this.config.units)) {
-            this.navigator.battle.federation.objects<ShapeRef>('Shape').create(unit.shape);
+            this.navigator.battle.federation.objects<Shape>('Shape').create(unit.shape);
         }
     }
 
