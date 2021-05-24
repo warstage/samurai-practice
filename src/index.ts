@@ -1,7 +1,7 @@
 // Copyright Felix Ungman. All rights reserved.
 // Licensed under GNU General Public License version 3 or later.
 
-import {Navigator, Runtime, RuntimeConfiguration,} from 'warstage-runtime';
+import {Navigator, Runtime, RuntimeConfiguration} from 'warstage-runtime';
 import {Scenario} from './scenario';
 
 if (!RuntimeConfiguration.tryAutoRedirect()) {
@@ -14,16 +14,5 @@ if (!RuntimeConfiguration.tryAutoRedirect()) {
             const match = await navigator.createMatch(scenario.getParams());
             scenario.startup(match);
         }
-    });
-    navigator.battle.onEnterBattle.subscribe(() => {
-    });
-    navigator.lobby.onLeaveMatch.subscribe(() => {
-        scenario.shutdown();
-        scenario = null;
-        navigator.system.federation.requestService('EnterLobby', {
-            lobbyId: '000000000000000000000001' // samuraiwars.net online lobby-id
-        }).then(() => {}, err => {
-            console.error(err);
-        })
     });
 }

@@ -19,7 +19,7 @@
     "warstage-battle-model": "~0.9.2",
     "warstage-entities": "~0.9.2",
     "warstage-lobby-model": "~0.9.2",
-    "warstage-runtime": "~0.9.3"
+    "warstage-runtime": "~0.9.4"
   },
   "devDependencies": {
     "@types/node": "~14.14.33",
